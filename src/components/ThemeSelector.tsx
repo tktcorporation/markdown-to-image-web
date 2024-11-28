@@ -42,44 +42,40 @@ export function ThemeSelector() {
   return (
     <div className="relative w-48">
       <Listbox value={currentTheme} onChange={handleChange}>
-        <div>
+        <div className="relative">
           <Listbox.Button
             className="relative w-full py-2 px-4 text-left rounded-lg shadow-sm border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
             style={{
               backgroundColor: currentTheme.secondaryBackground,
               color: currentTheme.text,
               borderColor: currentTheme.border,
-              boxShadow: `0 1px 3px ${currentTheme.border}`,
             }}
           >
             <ThemeOption theme={currentTheme} selected={false} />
           </Listbox.Button>
 
           <Listbox.Options
-            className="absolute w-full mt-1 rounded-lg shadow-lg overflow-hidden z-10 focus:outline-none"
+            className="absolute w-full mt-1 rounded-lg shadow-lg overflow-hidden focus:outline-none z-[100]"
             style={{
               backgroundColor: currentTheme.background,
               borderColor: currentTheme.border,
-              border: '1px solid'
+              border: '1px solid',
             }}
           >
             {themes.map((theme) => (
               <Listbox.Option
                 key={theme.id}
                 value={theme}
-                className="ui-active:bg-opacity-75 ui-active:cursor-pointer"
+                className={({ active }) => `
+                  relative cursor-pointer select-none py-2 px-4 transition-colors duration-200
+                  ${active ? 'bg-opacity-90' : ''}
+                `}
+                style={{
+                  backgroundColor: currentTheme.secondaryBackground,
+                  color: currentTheme.text,
+                }}
               >
-                {({ active, selected }) => (
-                  <div
-                    className="relative cursor-pointer select-none py-2 px-4 transition-colors duration-150"
-                    style={{
-                      backgroundColor: active ? theme.secondaryBackground : theme.background,
-                      color: theme.text,
-                    }}
-                  >
-                    <ThemeOption theme={theme} selected={selected} />
-                  </div>
-                )}
+                {({ selected }) => <ThemeOption theme={theme} selected={selected} />}
               </Listbox.Option>
             ))}
           </Listbox.Options>

@@ -8,11 +8,7 @@ export function useImageExport() {
   const [isCopying, setIsCopying] = useState(false);
   const { toast } = useToast();
 
-  const handleExport = useCallback(async (
-    element: HTMLElement,
-    theme: Theme,
-    markdown: string
-  ) => {
+  const handleExport = useCallback(async (element: HTMLElement) => {
     if (!element) {
       toast({
         variant: "destructive",
@@ -24,7 +20,11 @@ export function useImageExport() {
 
     setIsExporting(true);
     try {
-      await ImageService.exportImage({ element, theme, markdown });
+      await ImageService.exportImage({ 
+        element, 
+        markdown: '', // We don't need markdown for the filename in this case
+        theme: {} as Theme // Theme will be handled by the current styles
+      });
       toast({
         title: "Success",
         description: "Image exported successfully",
@@ -42,11 +42,7 @@ export function useImageExport() {
     }
   }, [toast]);
 
-  const handleCopy = useCallback(async (
-    element: HTMLElement,
-    theme: Theme,
-    markdown: string
-  ) => {
+  const handleCopy = useCallback(async (element: HTMLElement) => {
     if (!element) {
       toast({
         variant: "destructive",
@@ -58,7 +54,11 @@ export function useImageExport() {
 
     setIsCopying(true);
     try {
-      await ImageService.copyToClipboard({ element, theme, markdown });
+      await ImageService.copyToClipboard({ 
+        element,
+        markdown: '', // We don't need markdown for copying
+        theme: {} as Theme // Theme will be handled by the current styles
+      });
       toast({
         title: "Success",
         description: "Image copied to clipboard",

@@ -1,4 +1,4 @@
-export interface Theme {
+interface Theme {
   id: string;
   name: string;
   background: string;
@@ -17,43 +17,45 @@ export const themes: Theme[] = [
   {
     id: 'light',
     name: 'Light',
-    background: '#ffffff',
+    background: 'linear-gradient(135deg, #f6f8fd 0%, #f1f5ff 100%)',
     text: '#1a1a1a',
-    accent: '#3b82f6',
-    border: '#e5e7eb',
-    codeBackground: '#f3f4f6',
+    accent: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)',
+    border: 'rgba(226, 232, 240, 0.8)',
+    codeBackground: 'rgba(243, 244, 246, 0.8)',
     buttonText: '#ffffff',
-    secondaryBackground: '#f9fafb',
-    scrollbarTrack: '#f1f1f1',
-    scrollbarThumb: '#c1c1c1',
-    scrollbarThumbHover: '#a1a1a1'
+    secondaryBackground: 'rgba(255, 255, 255, 0.7)',
+    scrollbarTrack: 'rgba(241, 241, 241, 0.6)',
+    scrollbarThumb: 'rgba(193, 193, 193, 0.8)',
+    scrollbarThumbHover: 'rgba(161, 161, 161, 0.9)'
   },
   {
     id: 'dark',
     name: 'Dark',
-    background: '#1a1a1a',
+    background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
     text: '#ffffff',
-    accent: '#60a5fa',
-    border: '#374151',
-    codeBackground: '#2d2d2d',
+    accent: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    border: 'rgba(55, 65, 81, 0.8)',
+    codeBackground: 'rgba(45, 45, 45, 0.8)',
     buttonText: '#ffffff',
-    secondaryBackground: '#262626',
-    scrollbarTrack: '#2d2d2d',
-    scrollbarThumb: '#404040',
-    scrollbarThumbHover: '#4a4a4a'
+    secondaryBackground: 'rgba(38, 38, 38, 0.7)',
+    scrollbarTrack: 'rgba(45, 45, 45, 0.6)',
+    scrollbarThumb: 'rgba(64, 64, 64, 0.8)',
+    scrollbarThumbHover: 'rgba(74, 74, 74, 0.9)'
   },
   {
     id: 'sepia',
     name: 'Sepia',
-    background: '#f8f4e9',
+    background: 'linear-gradient(135deg, #fbf8f2 0%, #f8f4e9 100%)',
     text: '#433422',
-    accent: '#8b4513',
-    border: '#d3cbb7',
-    codeBackground: '#f0ece1',
+    accent: 'linear-gradient(135deg, #9c4221 0%, #c05621 100%)',
+    border: 'rgba(211, 203, 183, 0.8)',
+    codeBackground: 'rgba(240, 236, 225, 0.8)',
     buttonText: '#ffffff',
-    secondaryBackground: '#f5f1e6',
-    scrollbarTrack: '#f0ece1',
-    scrollbarThumb: '#d3cbb7',
-    scrollbarThumbHover: '#c4b89f'
+    secondaryBackground: 'rgba(245, 241, 230, 0.7)',
+    scrollbarTrack: 'rgba(240, 236, 225, 0.6)',
+    scrollbarThumb: 'rgba(211, 203, 183, 0.8)',
+    scrollbarThumbHover: 'rgba(196, 184, 159, 0.9)'
   }
 ];
+
+export type { Theme };

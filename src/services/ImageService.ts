@@ -46,10 +46,7 @@ export class ImageService {
     }
   }
 
-  private static async processElement(
-    element: HTMLElement,
-    theme: Theme
-  ): Promise<HTMLCanvasElement> {
+  private static async processElement(element: HTMLElement): Promise<HTMLCanvasElement> {
     await Promise.all([
       this.waitForFonts(),
       this.waitForImages(document),
@@ -58,7 +55,6 @@ export class ImageService {
 
     const scale = Math.max(window.devicePixelRatio || 1, 2);
     const canvas = await html2canvas(element, {
-      backgroundColor: theme.background,
       scale,
       useCORS: true,
       logging: false,
@@ -86,10 +82,7 @@ export class ImageService {
   static async processImage(options: ImageProcessingOptions): Promise<ProcessedImage> {
     this.validateElement(options.element);
 
-    const canvas = await this.processElement(
-      options.element,
-      options.theme
-    );
+    const canvas = await this.processElement(options.element);
 
     const blob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob(
