@@ -25,7 +25,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({
     if (background.includes('linear-gradient')) {
       return background.replace(
         /#([0-9A-F]{6})/gi,
-        (match, hex) => {
+        (_, hex) => {
           const r = parseInt(hex.slice(0, 2), 16);
           const g = parseInt(hex.slice(2, 4), 16);
           const b = parseInt(hex.slice(4, 6), 16);
