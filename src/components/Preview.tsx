@@ -62,12 +62,13 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({
     background: currentTheme.secondaryBackground,
     color: currentTheme.text,
     minHeight: '400px',
+    height: '100%',
     borderRadius: '16px',
     // boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
   } as React.CSSProperties;
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <div 
         className="h-[60px] flex justify-between items-center px-4 border-b"
         style={{ 
@@ -84,7 +85,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({
         />
       </div>
       <div 
-        className="p-3" 
+        className="flex-1"
         ref={ref} 
         style={{ 
           background: getTransparentBackground(currentTheme.accent, 0.6),

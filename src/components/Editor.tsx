@@ -35,7 +35,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
   };
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="h-full flex flex-col">
       <div 
         className="h-[60px] flex items-center px-4 border-b"
         style={{ 
@@ -46,7 +46,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
         <h2 className="text-lg font-medium">Editor</h2>
       </div>
       <div 
-        className="relative"
+        className="flex-1 relative"
         style={{ 
           height: height ? `${height}px` : 'auto',
           minHeight: '400px'
@@ -56,7 +56,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
           {/* Line Numbers */}
           <div
             id="line-numbers"
-            className="select-none overflow-y-auto text-right"
+            className="select-none text-right"
             style={{
               ...commonStyles,
               background: currentTheme.codeBackground,
