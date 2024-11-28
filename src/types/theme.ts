@@ -23,7 +23,7 @@ export const themes: Theme[] = [
     border: 'rgba(226, 232, 240, 0.8)',
     codeBackground: 'rgba(243, 244, 246, 0.8)',
     buttonText: '#ffffff',
-    secondaryBackground: 'rgba(255, 255, 255, 0.7)',
+    secondaryBackground: '#ffffff',
     scrollbarTrack: 'rgba(241, 241, 241, 0.6)',
     scrollbarThumb: 'rgba(193, 193, 193, 0.8)',
     scrollbarThumbHover: 'rgba(161, 161, 161, 0.9)'
@@ -37,7 +37,7 @@ export const themes: Theme[] = [
     border: 'rgba(55, 65, 81, 0.8)',
     codeBackground: 'rgba(45, 45, 45, 0.8)',
     buttonText: '#ffffff',
-    secondaryBackground: 'rgba(38, 38, 38, 0.7)',
+    secondaryBackground: '#262626',
     scrollbarTrack: 'rgba(45, 45, 45, 0.6)',
     scrollbarThumb: 'rgba(64, 64, 64, 0.8)',
     scrollbarThumbHover: 'rgba(74, 74, 74, 0.9)'
@@ -51,7 +51,7 @@ export const themes: Theme[] = [
     border: 'rgba(211, 203, 183, 0.8)',
     codeBackground: 'rgba(240, 236, 225, 0.8)',
     buttonText: '#ffffff',
-    secondaryBackground: 'rgba(245, 241, 230, 0.7)',
+    secondaryBackground: '#f5f1e6',
     scrollbarTrack: 'rgba(240, 236, 225, 0.6)',
     scrollbarThumb: 'rgba(211, 203, 183, 0.8)',
     scrollbarThumbHover: 'rgba(196, 184, 159, 0.9)'
