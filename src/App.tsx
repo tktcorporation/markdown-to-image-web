@@ -71,31 +71,31 @@ function AppContent() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-2 py-6">
-        {/* Mobile Tab View */}
-        <div className="md:hidden">
+      <div className="min-h-screen flex flex-col">
+        <div className="container mx-auto px-2 py-6 flex-1">
+          {/* Mobile Tab View */}
           <TabView 
             editorContent={editorContent}
             previewContent={previewContent}
           />
-        </div>
 
-        {/* Desktop Split View */}
-        <div className="hidden md:grid md:grid-cols-2 relative">
-          <div className="rounded-l-lg overflow-hidden">
-            {editorContent}
-          </div>
-          {/* Divider Line */}
-          <div 
-            className="absolute top-0 bottom-0 left-1/2 w-px"
-            style={{ background: currentTheme.border }}
-          />
-          <div className="rounded-r-lg overflow-hidden">
-            {previewContent}
+          {/* Desktop Split View */}
+          <div className="hidden md:grid md:grid-cols-2 relative">
+            <div className="rounded-l-lg overflow-hidden">
+              {editorContent}
+            </div>
+            {/* Divider Line */}
+            <div 
+              className="absolute top-0 bottom-0 left-1/2 w-px"
+              style={{ background: currentTheme.border }}
+            />
+            <div className="rounded-r-lg overflow-hidden">
+              {previewContent}
+            </div>
           </div>
         </div>
+        <Toaster />
       </div>
-      <Toaster />
     </Layout>
   );
 }

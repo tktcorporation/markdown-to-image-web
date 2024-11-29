@@ -10,8 +10,8 @@ export function TabView({ editorContent, previewContent }: TabViewProps) {
   const { currentTheme } = useTheme();
 
   return (
-    <div className="md:hidden">
-      <Tabs defaultValue="editor" className="w-full">
+    <div className="md:hidden min-h-screen flex flex-col">
+      <Tabs defaultValue="editor" className="w-full flex-1 flex flex-col">
         <TabsList 
           className="sticky top-0 z-20 w-full flex border-b bg-opacity-50 backdrop-blur-sm p-0 h-auto bg-transparent"
           style={{ 
@@ -46,10 +46,10 @@ export function TabView({ editorContent, previewContent }: TabViewProps) {
             Preview
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="editor" className="outline-none">
+        <TabsContent value="editor" className="outline-none flex-1">
           {editorContent}
         </TabsContent>
-        <TabsContent value="preview" className="outline-none">
+        <TabsContent value="preview" className="outline-none flex-1">
           {previewContent}
         </TabsContent>
       </Tabs>

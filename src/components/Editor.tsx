@@ -15,17 +15,41 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
   const { currentTheme } = useTheme();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [lineCount, setLineCount] = useState(1);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     setLineCount(value.split('\n').length);
   }, [value]);
 
   const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
-    const lineNumbers = document.getElementById('line-numbers');
-    if (lineNumbers) {
-      lineNumbers.scrollTop = e.currentTarget.scrollTop;
+    if (!isMobile) {
+      const lineNumbers = document.getElementById('line-numbers');
+      if (lineNumbers) {
+        lineNumbers.scrollTop = e.currentTarget.scrollTop;
+      }
     }
   };
+
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea && isMobile) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [value, isMobile]);
 
   const commonStyles = {
     lineHeight: '1.6',
@@ -48,11 +72,11 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
       <div 
         className="flex-1 relative"
         style={{ 
-          height: height ? `${height}px` : 'auto',
-          minHeight: '400px'
+          height: !isMobile && height ? `${height}px` : 'auto',
+          minHeight: !isMobile ? '400px' : 'auto'
         }}
       >
-        <div className="absolute inset-0 flex">
+        <div className={isMobile ? "flex" : "absolute inset-0 flex"}>
           {/* Line Numbers */}
           <div
             id="line-numbers"
@@ -65,7 +89,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
               width: '2.5rem',
               paddingRight: '0.5rem',
               paddingLeft: '0.25rem',
-              height: '100%'
+              height: !isMobile ? '100%' : 'auto',
             }}
           >
             {Array.from({ length: lineCount }, (_, i) => (
@@ -76,26 +100,28 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(({
           </div>
 
           {/* Editor */}
-          <div className="flex-1 h-full">
-            <textarea
-              ref={textareaRef}
-              style={{
-                ...commonStyles,
-                background: currentTheme.secondaryBackground,
-                color: currentTheme.text,
-                '--scrollbar-track': currentTheme.scrollbarTrack,
-                '--scrollbar-thumb': currentTheme.scrollbarThumb,
-                '--scrollbar-thumb-hover': currentTheme.scrollbarThumbHover,
-                height: '100%'
-              } as React.CSSProperties}
-              className="w-full focus:outline-none focus:ring-1 ring-inset transition-all duration-200 resize-none"
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              onScroll={handleScroll}
-              placeholder="Enter your markdown here..."
-              spellCheck="false"
-            />
-          </div>
+          <textarea
+            ref={textareaRef}
+            style={{
+              ...commonStyles,
+              background: currentTheme.secondaryBackground,
+              color: currentTheme.text,
+              width: 'calc(100% - 2.5rem)',
+              overflow: isMobile ? 'hidden' : 'auto',
+              height: !isMobile ? '100%' : 'auto',
+              '--scrollbar-track': currentTheme.scrollbarTrack,
+              '--scrollbar-thumb': currentTheme.scrollbarThumb,
+              '--scrollbar-thumb-hover': currentTheme.scrollbarThumbHover,
+            } as React.CSSProperties}
+            className="focus:outline-none focus:ring-1 ring-inset transition-all duration-200 resize-none"
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value);
+            }}
+            onScroll={handleScroll}
+            placeholder="Enter your markdown here..."
+            spellCheck="false"
+          />
         </div>
       </div>
     </div>
