@@ -46,10 +46,16 @@ export function TabView({ editorContent, previewContent }: TabViewProps) {
         </button>
       </div>
       <div>
-        <div className={activeTab === 'editor' ? 'block' : 'hidden'}>
+        <div style={{ 
+          position: 'relative',
+          display: activeTab === 'editor' ? 'block' : 'none',
+        }}>
           {editorContent}
         </div>
-        <div className={activeTab === 'preview' ? 'block' : 'hidden'}>
+        <div style={{ 
+          position: 'relative',
+          display: activeTab === 'preview' ? 'block' : 'none',
+        }}>
           {previewContent}
         </div>
       </div>

@@ -46,37 +46,94 @@ export class ImageService {
     }
   }
 
-  private static async processElement(element: HTMLElement): Promise<HTMLCanvasElement> {
-    await Promise.all([
-      this.waitForFonts(),
-      this.waitForImages(document),
-      new Promise(resolve => setTimeout(resolve, 100))
-    ]);
-
-    const scale = Math.max(window.devicePixelRatio || 1, 2);
-    const canvas = await html2canvas(element, {
-      scale,
-      useCORS: true,
-      logging: false,
-      width: element.scrollWidth,
-      height: element.scrollHeight,
-      onclone: async (doc) => {
-        await this.waitForImages(doc);
-        await this.waitForFonts();
-      }
-    });
-
+  private static createGradientCanvas(gradient: string, width: number, height: number): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Failed to get canvas context');
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const hasContent = imageData.data.some((pixel, index) => index % 4 === 3 && pixel !== 0);
-    
-    if (!hasContent) {
-      throw new Error('Generated image is empty');
-    }
+    // linear-gradientの値をパースする
+    const match = gradient.match(/linear-gradient\((\d+)deg,\s*(.+?)\s*,\s*(.+?)\s*\)/);
+    if (!match) return canvas;
+
+    const [, angle, color1, color2] = match;
+    const angleRad = (parseInt(angle) - 90) * (Math.PI / 180);
+
+    // グラデーションを作成
+    const x = Math.cos(angleRad);
+    const y = Math.sin(angleRad);
+    const grad = ctx.createLinearGradient(
+      width/2 - x * width/2,
+      height/2 - y * height/2,
+      width/2 + x * width/2,
+      height/2 + y * height/2
+    );
+
+    grad.addColorStop(0, color1.trim());
+    grad.addColorStop(1, color2.trim());
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, width, height);
 
     return canvas;
+  }
+
+  private static async processElement(element: HTMLElement): Promise<HTMLCanvasElement> {
+    const clone = element.cloneNode(true) as HTMLElement;
+    document.body.appendChild(clone);
+
+    try {
+      // グラデーション背景を持つ要素を探して処理
+      const gradientElements = clone.querySelectorAll('[style*="linear-gradient"]');
+      gradientElements.forEach(el => {
+        if (el instanceof HTMLElement) {
+          const style = window.getComputedStyle(el);
+          const background = style.background;
+          if (background.includes('linear-gradient')) {
+            const gradientCanvas = this.createGradientCanvas(
+              background,
+              el.offsetWidth,
+              el.offsetHeight
+            );
+            el.style.background = `url(${gradientCanvas.toDataURL()})`;
+          }
+        }
+      });
+
+      await Promise.all([
+        this.waitForFonts(),
+        this.waitForImages(document),
+        new Promise(resolve => setTimeout(resolve, 100))
+      ]);
+
+      const scale = Math.max(window.devicePixelRatio || 1, 2);
+      const canvas = await html2canvas(clone, {
+        scale,
+        useCORS: true,
+        logging: false,
+        width: clone.scrollWidth,
+        height: clone.scrollHeight,
+        onclone: async (doc) => {
+          await this.waitForImages(doc);
+          await this.waitForFonts();
+        }
+      });
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Failed to get canvas context');
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const hasContent = imageData.data.some((pixel, index) => index % 4 === 3 && pixel !== 0);
+      
+      if (!hasContent) {
+        throw new Error('Generated image is empty');
+      }
+
+      return canvas;
+    } finally {
+      document.body.removeChild(clone);
+    }
   }
 
   static async processImage(options: ImageProcessingOptions): Promise<ProcessedImage> {
