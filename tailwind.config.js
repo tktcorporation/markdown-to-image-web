@@ -42,6 +42,10 @@ export default {
       backdropBlur: {
         xs: '2px',
       },
+      colors: {
+        accent: 'var(--accent-color)',
+        muted: 'rgba(156, 163, 175, 1)', // gray-400相当
+      }
     },
   },
   plugins: [
