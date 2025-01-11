@@ -65,11 +65,19 @@ export function useImageExport() {
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to copy image';
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: message,
-      });
+      if (message.includes('iOS')) {
+        toast({
+          variant: "ios-clipboard-error",
+          title: "Clipboard Error",
+          description: message,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Clipboard Error",
+          description: message,
+        });
+      }
       console.error('Copy failed:', error);
     } finally {
       setIsCopying(false);

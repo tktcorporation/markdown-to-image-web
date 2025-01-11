@@ -25,6 +25,30 @@ const getDetailedErrorMessage = (error: ClipboardError): string => {
   }
 };
 
+const isIOS = (): boolean => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+};
+
+const copyImageToClipboardIOS = async (element: HTMLElement): Promise<void> => {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  const selection = window.getSelection();
+  if (selection) {
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  try {
+    document.execCommand('copy');
+  } catch (error) {
+    throw new Error('Failed to copy image on iOS');
+  } finally {
+    if (selection) {
+      selection.removeAllRanges();
+    }
+  }
+};
+
 export const copyImageToClipboard = async (
   element: HTMLElement, 
   theme: Theme,
@@ -36,6 +60,11 @@ export const copyImageToClipboard = async (
 
   if (!element) {
     throw new Error('No element provided for copying');
+  }
+
+  if (isIOS()) {
+    await copyImageToClipboardIOS(element);
+    return;
   }
 
   try {
