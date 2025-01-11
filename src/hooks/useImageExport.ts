@@ -67,7 +67,7 @@ export function useImageExport() {
       const message = error instanceof Error ? error.message : 'Failed to copy image';
       toast({
         variant: "destructive",
-        title: "Error",
+        title: "Clipboard Error",
         description: message,
       });
       console.error('Copy failed:', error);

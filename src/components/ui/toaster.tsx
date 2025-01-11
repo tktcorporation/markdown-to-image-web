@@ -7,7 +7,7 @@ import {
   ToastViewport,
 } from "./toast"
 import { useToast } from "../../hooks/useToast"
-import { Copy, Check } from "lucide-react"
+import { Copy, Check, AlertTriangle } from "lucide-react"
 import { useState } from "react"
 
 export function Toaster() {
@@ -34,6 +34,7 @@ export function Toaster() {
     <ToastProvider>
       {toasts.map(function ({ id, title, description, variant, action, ...props }) {
         const isDestructive = variant === 'destructive'
+        const isIOSClipboardError = variant === 'ios-clipboard-error'
         const isCopied = copiedToasts.has(id)
 
         return (
@@ -41,7 +42,7 @@ export function Toaster() {
             <div className="grid gap-1">
               <div className="flex items-center justify-between">
                 {title && <ToastTitle>{title}</ToastTitle>}
-                {isDestructive && description && (
+                {(isDestructive || isIOSClipboardError) && description && (
                   <button
                     onClick={() => handleCopyError(id, description.toString())}
                     className="ml-2 p-1 rounded-md hover:bg-destructive/10 focus:outline-none focus:ring-2 focus:ring-destructive/20"
