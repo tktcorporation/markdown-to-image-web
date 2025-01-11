@@ -7,7 +7,7 @@ import {
   ToastViewport,
 } from "./toast"
 import { useToast } from "../../hooks/useToast"
-import { Copy, Check, AlertTriangle } from "lucide-react"
+import { Copy, Check } from "lucide-react"
 import { useState } from "react"
 
 export function Toaster() {
