@@ -49,6 +49,15 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
+## Testing
+
+Run end-to-end tests with Playwright:
+
+```bash
+npm run test:e2e
+```
+
+
 ## Usage
 
 1. **Enter Markdown**: Type or paste your markdown content in the editor on the left
