@@ -7,6 +7,14 @@ interface ClipboardError extends Error {
   name: string;
 }
 
+const blobToDataURL = (blob: Blob): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('Failed to read image data'));
+    reader.readAsDataURL(blob);
+  });
+
 const getDetailedErrorMessage = (error: ClipboardError): string => {
   switch (error.name) {
     case 'NotAllowedError':
@@ -89,12 +97,21 @@ export const copyImageToClipboard = async (
         );
       });
 
-      // Create ClipboardItem and write to clipboard
-      const clipboardItem = new ClipboardItem({
-        [blob.type]: blob
-      });
+      const attemptDataUrlCopy = async () => {
+        const dataUrl = await blobToDataURL(blob);
+        await navigator.clipboard.writeText(dataUrl);
+      };
 
-      await navigator.clipboard.write([clipboardItem]);
+      if (typeof ClipboardItem !== 'undefined' && navigator.clipboard.write) {
+        try {
+          const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+          await navigator.clipboard.write([clipboardItem]);
+        } catch (error) {
+          await attemptDataUrlCopy();
+        }
+      } else {
+        await attemptDataUrlCopy();
+      }
     } catch (error) {
       throw new Error(`Failed to process image: ${(error as Error).message}`);
     } finally {

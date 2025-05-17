@@ -179,7 +179,26 @@ export class ImageService {
     }
 
     const { blob } = await this.processImage(options);
-    const clipboardItem = new ClipboardItem({ [blob.type]: blob });
-    await navigator.clipboard.write([clipboardItem]);
+
+    const attemptDataUrlCopy = async () => {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = () => reject(new Error('Failed to read image data'));
+        reader.readAsDataURL(blob);
+      });
+      await navigator.clipboard.writeText(dataUrl);
+    };
+
+    if (typeof ClipboardItem !== 'undefined' && navigator.clipboard.write) {
+      try {
+        const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+        await navigator.clipboard.write([clipboardItem]);
+      } catch (error) {
+        await attemptDataUrlCopy();
+      }
+    } else {
+      await attemptDataUrlCopy();
+    }
   }
 }
